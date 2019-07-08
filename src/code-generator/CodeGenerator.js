@@ -1,6 +1,7 @@
 import domEvents from './dom-events-to-record'
 import pptrActions from './pptr-actions'
 import Block from './Block'
+import ctrl from '../models/extension-control-messages'
 
 const tab = '    '
 const featureTitle = `Feature: my feature name\n\n${tab}Scenario: my scenario\n`
@@ -22,6 +23,7 @@ export default class CodeGenerator {
     this._frameId = 0
     this._allFrames = {}
     this._screenshotCounter = 1
+    this._previousAction = null
   }
 
   generate (events) {
@@ -31,12 +33,11 @@ export default class CodeGenerator {
   _parseEvents (events) {
     console.debug(`generating code for ${events ? events.length : 0} events`)
     let result = ''
-
+    let previousUrl = null
     if (!events) return result
 
     for (let i = 0; i < events.length; i++) {
       const { action, selector, value, href, keyCode, tagName, frameId, frameUrl } = events[i]
-
       // we need to keep a handle on what frames events originate from
       this._setFrames(frameId, frameUrl)
       switch (action) {
@@ -49,14 +50,26 @@ export default class CodeGenerator {
         case 'change':
           this._blocks.push(this._handleChange(selector, value))
           break
+        case pptrActions.NAVIGATION:
+          if (previousUrl == href) {
+             break;
+          }
+          if (href.indexOf('-extension:') !== -1) {
+             break
+          }
+          previousUrl = href
+          this._blocks.push(this._handleNavigation(href, frameId))
+          break
         case pptrActions.GOTO:
-            this._blocks.push(this._handleGoto(href, frameId))
+          this._blocks.push(this._handleGoto(href, frameId))
+          previousUrl = href
           break
         case pptrActions.SCREENSHOT:
           this._blocks.push(this._handleScreenshot(value))
           break
       }
     }
+
     const indent = `${tab}${tab}`
     const newLine = `\n`
 

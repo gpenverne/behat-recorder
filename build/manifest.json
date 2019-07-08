@@ -2,7 +2,7 @@
   "name": "Behat Recorder",
   "version": "0.7.0",
   "manifest_version": 2,
-  "description": "A Chrome extension for recording browser interaction and generating Puppeteer scripts",
+  "description": "A Chrome extension for recording browser interaction and generating Behat tests",
   "permissions": [
     "storage",
     "webNavigation",

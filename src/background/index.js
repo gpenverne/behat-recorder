@@ -145,6 +145,8 @@ class RecordingController {
       console.debug('recording goto* for:', href)
       this.handleMessage({selector: undefined, value: undefined, action: pptrActions.GOTO, href})
       this._hasGoto = true
+    } else {
+      this.recordNavigation(href)
     }
   }
 
@@ -155,8 +157,8 @@ class RecordingController {
     }
   }
 
-  recordNavigation () {
-    this.handleMessage({ selector: undefined, value: undefined, action: pptrActions.NAVIGATION })
+  recordNavigation (href) {
+    this.handleMessage({ selector: undefined, value: undefined, action: pptrActions.NAVIGATION, href })
   }
 
   recordScreenshot (value) {
@@ -189,7 +191,7 @@ class RecordingController {
     console.debug('frameId is:', frameId)
     this.injectScript()
     if (frameId === 0) {
-      this.recordNavigation()
+      this.recordNavigation(window.location.href)
     }
   }
 

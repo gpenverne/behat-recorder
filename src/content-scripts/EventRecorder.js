@@ -115,6 +115,7 @@ export default class EventRecorder {
         coordinates: EventRecorder._getCoordinates(e)
       }
       this._sendMessage(msg)
+      this._sendMessage({ control: ctrl.GET_CURRENT_URL, href: window.location.href })
     } catch (e) {}
   }
 

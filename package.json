@@ -1,5 +1,5 @@
 {
-  "name": "puppeteer-recorder",
+  "name": "behat-recorder",
   "version": "0.7.0",
   "description": "A Chrome extension for recording browser interaction and generating Puppeteer scripts",
   "main": "index.js",
